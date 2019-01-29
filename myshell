@@ -1,0 +1,35 @@
+#!/bin/bash
+if test -d Backup
+	then
+     echo All textfiles will be backed up to your Backup directory
+     STR="Backup"
+else
+	 echo -n "enter a name for a backup directory: "
+	 read STR
+	 echo $STR
+	 mkdir $STR
+fi
+
+ for file in *.txt
+ do
+ if [  -f "$STR"/"$file" ]
+ then
+     # echo "$0: File '${file}' there."
+	 newfile="$STR"/"$file"
+
+	 if test $file -nt $newfile
+	 then
+		 # echo "$0: File '${file}' is newer"
+		 echo Updating file with newest version..
+		 cp -v "$file" "$STR/$file"
+	 elif test $newfile -nt $file
+	 then
+		 continue
+		 # echo "$0: File '${newfile}' is newer than '${file}' no need to backup"
+
+	 fi
+ else
+	  echo "$0: Backing up file '${file}' ..."
+	  cp -v "$file" "$STR/$file"
+ fi
+done
