@@ -1,73 +1,3 @@
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-// #include <unistd.h>
-// #define MAX_LINE 80 /* The maximum length command */
-// pid_t pid;
-// int command(int flag)
-// {
-// 	char argcs[100]; /* command line arguments */
-//
-//
-// int flag2;
-// 		printf("enter some stuff \n");
-// 	//fgets(argcs, 80, stdin);
-// 	scanf("%s \n", argcs);
-// 	// Returns first token
-// 	char* token = strtok(argcs, " ");
-// 	    // Keep printing tokens while one of the
-// 	    // delimiters present in str[].
-//
-// 	    while (flag) {
-// 		//	fflush(stdout);
-// 	        printf("%s\n", token);
-// 			fflush(stdout);
-//
-// 	        token = strtok(NULL, " ");
-// 		// 	if(strcmp(token, "&") == 0)
-// 		// 	{
-// 		// 	printf("ampersand!\n");
-// 		// 	fflush(stdout);
-// 		// 	flag2 = 3;
-// 		// }
-// 		// 	if(strcmp(token, "exit") == 0)
-// 		// 	flag2 = 2;
-// 		//
-// 		// 	if(strcmp(token, "\n") == 0)
-// 		// 	{
-// 		// 		break;
-// 		//
-// 		//
-// 		// }
-// 		// return 0;
-// 	}
-// 		return flag2;
-// }
-// int main(int argc, const char **args)
-// {
-//
-//
-// if( command(1) == 0 || command(1) == 3)
-// {
-// 	command(1);
-// }
-// int should_run = 1; /* flag to determine when to exit program */
-// // while (should_run) {
-// // printf("osh>"); fflush(stdout);
-//
-//
-// /**
-// * After reading user input, the steps are:
-// * (1) fork a child process using fork()
-// * (2) the child process will invoke execvp()
-// * (3) if command included &, parent will invoke wait() */
-// // pid = fork();
-// // execvp(argcs[0], argcs);
-// // should_run = argcs[2];
-// //    }
-// return 0;
-// }
-//
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdlib.h>
@@ -108,22 +38,30 @@ void parseSpace(char* str, char** parsed)
     for (i = 0; i < MAXLIST; i++) {
         parsed[i] = strsep(&str, " ");
 
+
+
+
+
         if (parsed[i] == NULL)
 		{
-			printf("count = %d.. about to execute\n", i);
+
+
 			execArgs(parsed);
 			break;
 		}
+
 		printf("%s\n", parsed[i]);
         if (strlen(parsed[i]) == 0)
             i--;
     }
+	return;
 }
 int main()
 {
     char inputString[MAXCOM], *parsedArgs[MAXLIST];
+	char history[MAXLIST][MAXCOM];
 
-    int execFlag = 0;
+    int history_buffer_index = 1, print_index = 0;
 
 
     while (1) {
@@ -132,14 +70,19 @@ printf("osh> ");
 fgets(inputString, MAXCOM, stdin);
         // process
 		inputString[strlen(inputString)-1]= '\0';
+		strcpy(history[history_buffer_index] ,inputString);
+		printf("copied %s to index %d of history array. \n", history[history_buffer_index], history_buffer_index);
+		printf("right now, this is the previous str %s  (index %d of history array). \n", history[history_buffer_index - 1], history_buffer_index - 1);
+
 		if(strcmp(inputString, "exit") == 0)
-		break;
+			break;
+		history_buffer_index ++;
 		parseSpace(inputString, parsedArgs);
-
-            //execArgs(parsedArgs);
-
-
     }
+//	printf("history_buffer_index returned with a value of %d\n", history_buffer_index);
+printf("contents in history array: \n");
+for(print_index = history_buffer_index; print_index > 0; print_index--)
+printf("%d %s\n", print_index, history[print_index]);
     return 0;
 }
 // https://brennan.io/2015/01/16/write-a-shell-in-c/
