@@ -80,6 +80,8 @@
 
 void execArgs(char** parsed)
 {
+	//printf("0 %s , 1 %s, 2  %s\n", parsed[0], parsed[1], parsed[2]);
+
     // Forking a child
     pid_t pid = fork();
 
@@ -87,9 +89,9 @@ void execArgs(char** parsed)
         printf("\nFailed forking child..");
         return;
     } else if (pid == 0) {
-        execvp(parsed[1], parsed);
+        execvp(parsed[0], parsed);
 			printf("failure to execute because %s\n", strerror(errno));
-			printf("%s %s\n", parsed[1], parsed[1]);
+
         exit(0);
 
     } else {
@@ -129,6 +131,9 @@ printf("osh> ");
         // take input
 fgets(inputString, MAXCOM, stdin);
         // process
+		inputString[strlen(inputString)-1]= '\0';
+		if(strcmp(inputString, "exit") == 0)
+		break;
 		parseSpace(inputString, parsedArgs);
 
             //execArgs(parsedArgs);
