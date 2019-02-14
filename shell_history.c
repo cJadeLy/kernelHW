@@ -12,7 +12,7 @@ void executeCommand(char** parsed)
 {
 	//printf("0 %s , 1 %s, 2  %s\n", parsed[0], parsed[1], parsed[2]);
 
-    // Forking a child
+    // Forking a child process to execute commands
     pid_t pid = fork();
 
     if (pid < 0) {
@@ -21,6 +21,7 @@ void executeCommand(char** parsed)
     } else if (pid == 0) {
         execvp(parsed[0], parsed);
 			printf("failure to execute because %s\n", strerror(errno));
+			printf("string was %s\n", parsed[0]);
 
         exit(0);
 
@@ -30,6 +31,7 @@ void executeCommand(char** parsed)
         return;
     }
 }
+
 
 void parse(char* str, char** parsed)
 {
@@ -54,10 +56,30 @@ void parse(char* str, char** parsed)
     }
 	return;
 }
+void executeFromHistory(char** args,  int command_index, char buffer[MAX_LIST][MAX_LIST])
+{
+
+	char *parsed_command[MAX_LIST];
+	 printf(" looking at command (%d) is string: %s\n",command_index, buffer[command_index]);
+
+
+	   strcpy(*args,buffer[command_index]);
+		 printf("most recent command (%d) is string: %s\n",command_index , args[0]);
+	     parse(*args, parsed_command);
+
+
+}
+int valid_index(int valid, int range)
+{
+	if(valid >= 1 && valid < range)
+	return 1;
+
+	return 0;
+}
 int main()
 {
     char full_command[MAX_LIST], *parsed_command[MAX_LIST];
-	char history[MAX_LIST][MAX_LIST];
+	char history[MAX_LIST][MAX_LIST], *history_buffer[MAX_LIST];
 
     int history_buffer_index = 1, print_index = 0;
 
@@ -66,19 +88,60 @@ int main()
 printf("osh> ");
         // Read in user input
 fgets(full_command, MAX_LIST, stdin);
-        // Replace newline with NULL
-		full_command[strlen(full_command)-1]= '\0';
-		// Add full command to history before parsing & executing
-		strcpy(history[history_buffer_index] ,full_command);
-		printf("copied %s to index %d of history array. \n", history[history_buffer_index], history_buffer_index);
-		printf("right now, this is the previous str %s  (index %d of history array). \n", history[history_buffer_index - 1], history_buffer_index - 1);
+// Replace newline with NULL
+full_command[strlen(full_command)-1]= '\0';
+printf("full command is %s\n", full_command);
 		// Deal with exit command here, not a "real" command
 		if(strcmp(full_command, "exit") == 0)
-			break;
-		// Only go to next index of history array if user still entering commands
-		history_buffer_index ++;
-		// Parse out commands and in this function we will call a function that calls execvp()
-		parse(full_command, parsed_command);
+		{
+
+				strcpy(history[history_buffer_index] ,full_command);
+				break;
+		}
+
+
+		if(strcmp(full_command, "!!") == 0)
+		{
+
+			if(valid_index(history_buffer_index - 1, history_buffer_index))
+			{
+				strcpy(history[history_buffer_index], history[history_buffer_index - 1]);
+				history_buffer_index++;
+				executeFromHistory(history_buffer, history_buffer_index - 1, history);
+			}
+			else
+			{
+				printf("No commands in history\n");
+			}
+		}else if(strncmp(full_command, "!", 1) == 0)
+		{
+			print_index  = atoi(&full_command[1]);
+			if(valid_index(print_index, history_buffer_index))
+			{
+				strcpy(history[history_buffer_index], history[print_index]);
+				executeFromHistory(history_buffer, print_index, history);
+			}
+			else
+			{
+				printf("No such command in history\n");
+			}
+		}else
+		{
+			// Add full command to history before parsing & executing
+			strcpy(history[history_buffer_index] ,full_command);
+			// Only go to next index of history array if user still entering commands
+			history_buffer_index ++;
+			// Parse out commands and in this function we will call a function that calls execvp()
+			parse(full_command, parsed_command);
+		}
+
+
+		//printf("copied %s to index %d of history array. \n", history[history_buffer_index], history_buffer_index);
+
+
+
+
+
     }
 //	printf("history_buffer_index returned with a value of %d\n", history_buffer_index);
 printf("contents in history array: \n");
