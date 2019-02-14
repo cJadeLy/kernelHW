@@ -7,11 +7,9 @@
 #include<errno.h>
 
 #define MAX_LIST 80
-
+// All that is left to do is execute the command (as long as fork doesn't fail!)
 void executeCommand(char** parsed)
 {
-	//printf("0 %s , 1 %s, 2  %s\n", parsed[0], parsed[1], parsed[2]);
-
     // Forking a child process to execute commands
     pid_t pid = fork();
 
@@ -31,8 +29,7 @@ void executeCommand(char** parsed)
         return;
     }
 }
-
-
+// prepare a command to be executed by separating each word
 void parse(char* str, char** parsed)
 {
     int i;
@@ -48,6 +45,7 @@ void parse(char* str, char** parsed)
 		}
 
 	//	printf("%s\n", parsed[i]);
+		// Don't process the empty string
         if (strlen(parsed[i]) == 0)
 		{
 			i--;
@@ -56,19 +54,16 @@ void parse(char* str, char** parsed)
     }
 	return;
 }
+// Makes sure a specific command from the history buffer is executed
 void executeFromHistory(char** args,  int command_index, char buffer[MAX_LIST][MAX_LIST])
 {
-
 	char *parsed_command[MAX_LIST];
-	 printf(" looking at command (%d) is string: %s\n",command_index, buffer[command_index]);
-
-
-	   strcpy(*args,buffer[command_index]);
-		 printf("most recent command (%d) is string: %s\n",command_index , args[0]);
-	     parse(*args, parsed_command);
-
-
+	 //printf(" looking at command (%d) is string: %s\n",command_index, buffer[command_index]);
+	strcpy(*args,buffer[command_index]);
+		// printf("most recent command (%d) is string: %s\n",command_index , args[0]);
+	parse(*args, parsed_command);
 }
+// Checks to make sure there is a valid command from the history buffer to execute
 int valid_index(int valid, int range)
 {
 	if(valid >= 1 && valid < range)
@@ -81,74 +76,85 @@ int main()
     char full_command[MAX_LIST], *parsed_command[MAX_LIST];
 	char history[MAX_LIST][MAX_LIST], *history_buffer[MAX_LIST];
 
-    int history_buffer_index = 1, print_index = 0;
+    int history_buffer_index = 1, print_index = 0, should_run = 1;
 
 
-    while (1) {
-printf("osh> ");
-        // Read in user input
-fgets(full_command, MAX_LIST, stdin);
-// Replace newline with NULL
-full_command[strlen(full_command)-1]= '\0';
-printf("full command is %s\n", full_command);
+	while (should_run)
+	{
+		printf("osh> ");
+		// Read in user input
+		fgets(full_command, MAX_LIST, stdin);
+		// Replace newline with NULL
+		full_command[strlen(full_command)-1]= '\0';
 		// Deal with exit command here, not a "real" command
 		if(strcmp(full_command, "exit") == 0)
 		{
-
 				strcpy(history[history_buffer_index] ,full_command);
 				break;
 		}
-
-
 		if(strcmp(full_command, "!!") == 0)
-		{
-
+		{	// if there is a previous command, add it to the most recent index of the history buffer and execute it
 			if(valid_index(history_buffer_index - 1, history_buffer_index))
 			{
 				strcpy(history[history_buffer_index], history[history_buffer_index - 1]);
 				history_buffer_index++;
 				executeFromHistory(history_buffer, history_buffer_index - 1, history);
-			}
-			else
-			{
-				printf("No commands in history\n");
-			}
+			}else
+				{
+					printf("No commands in history\n");
+				}
 		}else if(strncmp(full_command, "!", 1) == 0)
 		{
+			// determine the Nth command to execute
 			print_index  = atoi(&full_command[1]);
+			// execute if it is a valid index
 			if(valid_index(print_index, history_buffer_index))
 			{
 				strcpy(history[history_buffer_index], history[print_index]);
 				executeFromHistory(history_buffer, print_index, history);
-			}
-			else
+			}else
+				{
+					printf("No such command in history\n");
+				}
+		}else if(strcmp(full_command, "history") == 0)
+		{
+			if(history_buffer_index > 10)
 			{
-				printf("No such command in history\n");
-			}
+				// the current history index is empty, waiting for a new command to fill the spot
+				history_buffer_index--;
+				for(print_index = history_buffer_index; print_index > (history_buffer_index - 10); print_index--)
+				printf("%d %s\n", print_index, history[print_index]);
+
+				// ready for new command again
+				history_buffer_index++;
+
+			}else if(history_buffer_index <= 1)
+			{
+				printf("No commands in history\n");
+			}else
+				{
+					// the current history index is empty, waiting for a new command to fill the spot
+					history_buffer_index--;
+					for(print_index = history_buffer_index; print_index > 0; print_index--)
+					printf("%d %s\n", print_index, history[print_index]);
+					// ready for new command again
+					history_buffer_index++;
+
+				}
+
 		}else
 		{
 			// Add full command to history before parsing & executing
 			strcpy(history[history_buffer_index] ,full_command);
-			// Only go to next index of history array if user still entering commands
+			// Go to next index of history array for entering more commands
 			history_buffer_index ++;
-			// Parse out commands and in this function we will call a function that calls execvp()
+			// Prepare for execution
 			parse(full_command, parsed_command);
 		}
-
-
-		//printf("copied %s to index %d of history array. \n", history[history_buffer_index], history_buffer_index);
-
-
-
-
-
     }
-//	printf("history_buffer_index returned with a value of %d\n", history_buffer_index);
-printf("contents in history array: \n");
-for(print_index = history_buffer_index; print_index > 0; print_index--)
-printf("%d %s\n", print_index, history[print_index]);
+		// Debug
+		// printf("contents in history array: \n");
+		// for(print_index = history_buffer_index; print_index > 0; print_index--)
+		// printf("%d %s\n", print_index, history[print_index]);
     return 0;
 }
-// https://brennan.io/2015/01/16/write-a-shell-in-c/
-// https://www.youtube.com/watch?v=z4LEuxMGGs8&t=117s
-// http://cs.boisestate.edu/~amit/teaching/297/notes/files-and-processes-handout.pdf
