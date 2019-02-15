@@ -42,7 +42,7 @@ gcc -o copy filecopy.c
 cat testfile2.txt
 ```
 
-# Project 1 - Simple Shell
+# Project 1 - UNIX Shell
 ## Build Instructions
 Mac/Linux/UNIX Only!!
 
