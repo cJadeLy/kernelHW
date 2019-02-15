@@ -74,6 +74,10 @@ To execute the Nth command in your command history type `!N`
 
 This means, if you enter 35 commands and then you type `history`, only the most recent 10 commands will be echoed to the screen, and they will be numbered 26 - 35
 
+*Therefore, if attempting to execute the Nth command, it must be correctly referred to. You may want to type* `history` *to view the list of previous commands currently available*
+
+**WARNING: As with a typical shell, the history buffer does not discriminate against invalid commands. If you attempt a bogus command, it will still be stored in history. Keep this in mind when executing `!N`**
+
 To exit, type `exit`
 
 # Project 2 - Linux Kernel Module for Listing Tasks
