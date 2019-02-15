@@ -1,3 +1,11 @@
+# Getting Started
+Navigate to the desired working directory
+
+```
+git clone 
+cd kernelHW/HW2
+
+```
 # 3.22 Shared Memory Object
 ## Build Instructions
 if on a Windows machine
