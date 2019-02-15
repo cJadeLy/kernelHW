@@ -22,8 +22,6 @@ void executeCommand(char** parsed)
 			printf("failure to execute because %s\n", strerror(errno));
 			printf("string was %s\n", parsed[0]);
 		}
-
-
         exit(0);
 
     } else {
@@ -46,14 +44,11 @@ void parse(char* str, char** parsed)
 			executeCommand(parsed);
 			break;
 		}
-
-	//	printf("%s\n", parsed[i]);
 		// Don't process the empty string
         if (strlen(parsed[i]) == 0)
 		{
 			i--;
 		}
-
     }
 	return;
 }
@@ -80,7 +75,6 @@ int main()
 	char history[MAX_LIST][MAX_LIST], *history_buffer[MAX_LIST];
 
     int history_buffer_index = 1, print_index = 0, should_run = 1;
-
 
 	while (should_run)
 	{
@@ -142,9 +136,7 @@ int main()
 					printf("%d %s\n", print_index, history[print_index]);
 					// ready for new command again
 					history_buffer_index++;
-
 				}
-
 		}else
 		{
 			// Add full command to history before parsing & executing
