@@ -1,4 +1,4 @@
-obj-m += tasks_lister_linear.o
+obj-m += task.o
 
 KERNELDIR ?= /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)

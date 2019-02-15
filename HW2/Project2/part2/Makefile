@@ -1,4 +1,4 @@
-obj-m += tasks_lister_dfs.o
+obj-m += dfs.o
 
 KERNELDIR ?= /lib/modules/$(shell uname -r)/build
 PWD := $(shell pwd)
