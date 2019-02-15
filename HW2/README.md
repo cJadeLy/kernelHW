@@ -47,10 +47,13 @@ cat testfile2.txt
 Mac/Linux/UNIX Only!!
 
 ```
+cd Project1
 gcc -o shell shell_history.c
 ./shell
 
 ```
+## Detail of features
+
 To view command history type `history`
 
 To execute most recent command type `!!`
@@ -59,6 +62,6 @@ To execute the Nth command in your command history type `!N`
 
 *you can only access the 10 most recent commands, however, the count will continue to increment*
 
-This means, if you enter 35 commands and then you type `history`, only the most recent 10 commands will be echoed to the screen, but they will be numbered 26 - 35
+This means, if you enter 35 commands and then you type `history`, only the most recent 10 commands will be echoed to the screen, and they will be numbered 26 - 35
 
 To exit, type `exit`
