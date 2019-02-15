@@ -58,13 +58,13 @@ void executeFromHistory(char** args,  int command_index, char buffer[MAX_LIST][M
 	char *parsed_command[MAX_LIST];
 	 //printf(" looking at command (%d) is string: %s\n",command_index, buffer[command_index]);
 	strcpy(*args,buffer[command_index]);
-		// printf("most recent command (%d) is string: %s\n",command_index , args[0]);
+	 printf("attempting to execute command %s from history\n", args[0]);
 	parse(*args, parsed_command);
 }
 // Checks to make sure there is a valid command from the history buffer to execute
 int valid_index(int valid, int range)
 {
-	if(valid >= 1 && valid < range)
+	if(valid >= (range - 10) && valid < range)
 	return 1;
 
 	return 0;
@@ -83,6 +83,11 @@ int main()
 		fgets(full_command, MAX_LIST, stdin);
 		// Replace newline with NULL
 		full_command[strlen(full_command)-1]= '\0';
+		if(full_command[strlen(full_command)-1] == '&')
+		{
+			// can't figure out correct behavior for this so I will atleast make it not crash or do anything else weird
+			full_command[strlen(full_command)-1]= '\0';
+		}
 		// Deal with exit command here, not a "real" command
 		if(strcmp(full_command, "exit") == 0)
 		{
