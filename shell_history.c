@@ -17,9 +17,12 @@ void executeCommand(char** parsed)
         printf("\nFailed forking child..");
         return;
     } else if (pid == 0) {
-        execvp(parsed[0], parsed);
+        if(execvp(parsed[0], parsed) < 0)
+		{
 			printf("failure to execute because %s\n", strerror(errno));
 			printf("string was %s\n", parsed[0]);
+		}
+
 
         exit(0);
 
