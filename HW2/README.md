@@ -46,6 +46,8 @@ cat testfile2.txt
 ## Build Instructions
 Mac/Linux/UNIX Only!!
 
+From `HW2` folder:
+
 ```
 cd Project1
 gcc -o shell shell_history.c
@@ -65,3 +67,47 @@ To execute the Nth command in your command history type `!N`
 This means, if you enter 35 commands and then you type `history`, only the most recent 10 commands will be echoed to the screen, and they will be numbered 26 - 35
 
 To exit, type `exit`
+
+# Project 2 - Linux Kernel Module for Listing Tasks
+## Build Instructions - Part 1
+
+From `HW2` folder:
+
+```
+cd Project2/Part1
+make
+sudo insmod task.ko
+// to see that module loaded
+lsmod | grep task*
+// To see tasks from kernel log
+dmesg
+// compare this output to tasks in system
+ps -el
+// remove module
+sudo rmmod task
+// clear kernel log buffer
+sudo dmesg -c
+// to clean working directory
+make clean
+```
+## Build Instructions - Part 2
+
+From `HW2` folder:
+
+```
+cd Project2/part2
+make
+sudo insmod dfs.ko
+// to see that module loaded
+lsmod | grep dfs*
+// To see tasks from kernel log
+dmesg
+// compare this to DFS output 
+ps -eLf
+// remove module
+sudo rmmod dfs
+// clear kernel log buffer
+sudo dmesg -c
+// to clean working directory
+make clean
+```
