@@ -4,12 +4,10 @@
 #include <linux/sched.h>
 
 
-int tasks_lister_linear_init(void)
+int tasks_init(void)
 {
   struct task_struct *task;
   printk(KERN_INFO "Loading module...\n");
-
- 
 
   for_each_process(task)
   {
@@ -20,10 +18,10 @@ int tasks_lister_linear_init(void)
   return 0;
 }
 
-void tasks_lister_linear_exit(void)
+void tasks_exit(void)
 {
   printk(KERN_INFO "Module removed.\n");
 }
 
-module_init(tasks_lister_linear_init);
-module_exit(tasks_lister_linear_exit);
+module_init(tasks_init);
+module_exit(tasks_exit);

@@ -17,7 +17,7 @@ void dfs(struct task_struct *task)
   }
 }
 
-int tasks_lister_dfs_init(void)
+int dfs_init(void)
 {
   printk(KERN_INFO "Loading module...\n");
 
@@ -27,10 +27,10 @@ int tasks_lister_dfs_init(void)
   return 0;
 }
 
-void tasks_lister_dfs_exit(void)
+void dfs_exit(void)
 {
   printk(KERN_INFO "Module removed.\n");
 }
 
-module_init(tasks_lister_dfs_init);
-module_exit(tasks_lister_dfs_exit);
+module_init(dfs_init);
+module_exit(dfs_exit);
