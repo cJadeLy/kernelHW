@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <sys/mman.h>
-#include <libc.h>
+
 int main()
 {
  /* the size (in bytes) of shared memory object */
