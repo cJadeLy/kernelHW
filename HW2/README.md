@@ -2,7 +2,7 @@
 Navigate to the desired working directory
 
 ```
-git clone 
+git clone https://github.com/cJadeLy/kernelHW.git 
 cd kernelHW/HW2
 
 ```
