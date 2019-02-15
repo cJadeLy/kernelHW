@@ -6,9 +6,10 @@
 
 int tasks_lister_linear_init(void)
 {
+  struct task_struct *task;
   printk(KERN_INFO "Loading module...\n");
 
-  struct task_struct *task;
+ 
 
   for_each_process(task)
   {

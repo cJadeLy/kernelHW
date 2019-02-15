@@ -1,0 +1,1 @@
+cmd_/home/oscreader/git/kernelHW/HW2/Project2/part2/dfs.ko := ld -r -m elf_i386 -T /usr/src/linux-headers-3.16.0-4-common/scripts/module-common.lds --build-id  -o /home/oscreader/git/kernelHW/HW2/Project2/part2/dfs.ko /home/oscreader/git/kernelHW/HW2/Project2/part2/dfs.o /home/oscreader/git/kernelHW/HW2/Project2/part2/dfs.mod.o
