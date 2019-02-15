@@ -2,7 +2,7 @@
 Navigate to the desired working directory
 
 ```
-git clone https://github.com/cJadeLy/kernelHW.git 
+git clone https://github.com/cJadeLy/kernelHW.git
 cd kernelHW/HW2
 
 ```
@@ -82,6 +82,8 @@ To exit, type `exit`
 
 # Project 2 - Linux Kernel Module for Listing Tasks
 ## Build Instructions - Part 1
+1. Follow [these steps](http://people.westminstercollege.edu/faculty/ggagne/osc/vm/index.html) to set up your virtual environment
+2. Inside of the virtual machine, run the following commands from the terminal:
 
 From `HW2` folder:
 
@@ -103,7 +105,8 @@ sudo dmesg -c
 make clean
 ```
 ## Build Instructions - Part 2
-
+1. Follow [these steps](http://people.westminstercollege.edu/faculty/ggagne/osc/vm/index.html) to set up your virtual environment
+2. Inside of the virtual machine, run the following commands from the terminal:
 From `HW2` folder:
 
 ```
@@ -114,7 +117,7 @@ sudo insmod dfs.ko
 lsmod | grep dfs*
 // To see tasks from kernel log
 dmesg
-// compare this to DFS output 
+// compare this to DFS output
 ps -eLf
 // remove module
 sudo rmmod dfs
